@@ -26,6 +26,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Basic unit tests for the alternative ByteArrayOutputStream implementation.
