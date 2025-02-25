@@ -143,7 +143,9 @@ public class SwappedDataInputStreamTest {
 
     @Test
     public void testSkipBytes() throws IOException {
-        this.sdis.skipBytes(4);
+        int skipped = this.sdis.skipBytes(4);
+        //Emina Hanic + added assertion
+        assertEquals(4, skipped);
         assertEquals( 0x08070605, this.sdis.readInt() );
     }
 

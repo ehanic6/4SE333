@@ -219,5 +219,13 @@ public class ByteArrayOutputStreamTestCase {
         baout.close();
         baout1.close();
     }
+    //Emina Hanic + added test method
+    @Test
+    public void testByteArrayOutputStreamAtBoundary() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(0);
+        assertNotNull(baos);
+        byte[] data = baos.toByteArray();
+        assertEquals(0, data.length);
+    }
 }
 

@@ -107,6 +107,37 @@ public class CountingOutputStreamTest {
         assertEquals("resetByteCount()", size, cos.resetByteCount());
     }
 
+    //Emina Hanic + added test methods
+    @Test
+    public void testGetCountAtMax() throws Exception {
+        final long size = Integer.MAX_VALUE;
+        final OutputStream nos = new NullOutputStream();
+        final CountingOutputStream cos = new CountingOutputStream(nos);
+
+        IOUtils.copyLarge(new NullInputStream(size), cos);
+
+        assertEquals(Integer.MAX_VALUE, cos.getByteCount());
+
+        assertEquals(Integer.MAX_VALUE, cos.getCount());
+    }
+    @Test
+    public void testResetCountAtMax() throws Exception {
+        final long size = Integer.MAX_VALUE;
+        OutputStream nos = new NullOutputStream();
+        CountingOutputStream cos = new CountingOutputStream(nos);
+
+        IOUtils.copyLarge(new NullInputStream(size), cos);
+
+        assertEquals(Integer.MAX_VALUE, cos.getByteCount());
+
+        int previousCount = cos.resetCount();
+        assertEquals(Integer.MAX_VALUE, previousCount);
+
+        assertEquals(0, cos.resetCount());
+    }
+
+
+
     private void assertByteArrayEquals(final String msg, final byte[] array, final int start, final int end) {
         for (int i = start; i < end; i++) {
             assertEquals(msg+": array[" + i + "] mismatch", array[i], i-start);

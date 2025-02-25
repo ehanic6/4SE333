@@ -56,6 +56,15 @@ public class BoundedInputStreamTest {
         }
         assertEquals("limit < length end", -1, bounded.read());
     }
+    //Emina Hanic + Added Test Method
+
+    @Test
+    public void testReadMaxZero() throws Exception {
+        final byte[] Hello = "Hello".getBytes();
+        BoundedInputStream bis = new BoundedInputStream(new ByteArrayInputStream(Hello), 0);
+        assertEquals(-1, bis.read());
+
+    }
 
     @Test
     public void testReadArray() throws Exception {
@@ -86,4 +95,36 @@ public class BoundedInputStreamTest {
             assertEquals(msg + " byte[" + i + "]", expected[i], actual[i]);
         }
     }
+    //Emina Hanic + Added Test Methods for available()
+    @Test
+    public void testAvailable() throws Exception {
+        final byte[] Hello = "Hello".getBytes();
+        BoundedInputStream bis = new BoundedInputStream(new ByteArrayInputStream(Hello), 10);
+        assertEquals(Hello.length, bis.available());
+    }
+
+
+    @Test
+    public void testAvailablePosCondition() throws Exception {
+        final byte[] Hello = "Hello".getBytes();
+        BoundedInputStream bis = new BoundedInputStream(new ByteArrayInputStream(Hello), 2);
+
+        assertEquals( Hello.length, bis.available());
+
+        for (int i = 0; i < 2; i++) {
+            assertEquals("limit < length byte[" + i + "]", Hello[i], bis.read());
+        }
+
+        assertEquals(0, bis.available());
+
+
+    }
+    @Test
+    public void testAvailableMaxZero() throws Exception {
+        final byte[] Hello = "Hello".getBytes();
+        BoundedInputStream bis = new BoundedInputStream(new ByteArrayInputStream(Hello), 0);
+        assertEquals(0, bis.available());
+
+    }
+
 }

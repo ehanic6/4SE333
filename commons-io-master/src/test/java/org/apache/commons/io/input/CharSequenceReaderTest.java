@@ -64,6 +64,9 @@ public class CharSequenceReaderTest {
     @Test
     public void testSkip() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
+        //Emina Hanic - check for conditional boundary
+        assertEquals(0, reader.skip(0));
+
         assertEquals(3, reader.skip(3));
         checkRead(reader, "Bar");
         assertEquals(-1, reader.skip(3));
