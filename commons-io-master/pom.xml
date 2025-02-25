@@ -29,8 +29,8 @@
 
   <inceptionYear>2002</inceptionYear>
   <description>
-The Apache Commons IO library contains utility classes, stream implementations, file filters,
-file comparators, endian transformation classes, and much more.
+    The Apache Commons IO library contains utility classes, stream implementations, file filters,
+    file comparators, endian transformation classes, and much more.
   </description>
 
   <url>http://commons.apache.org/proper/commons-io/</url>
@@ -248,6 +248,7 @@ file comparators, endian transformation classes, and much more.
   </dependencies>
 
   <properties>
+    <pitest.version>1.18.0</pitest.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <!--  version 4.0.0 requires Java 8 -->
@@ -261,19 +262,19 @@ file comparators, endian transformation classes, and much more.
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
     <commons.osgi.export>
-        <!-- Explicit list of packages from IO 1.4 -->
-        org.apache.commons.io;
-        org.apache.commons.io.comparator;
-        org.apache.commons.io.filefilter;
-        org.apache.commons.io.input;
-        org.apache.commons.io.output;version=1.4.9999;-noimport:=true,
-        <!-- Same list plus * for new packages -->
-        org.apache.commons.io;
-        org.apache.commons.io.comparator;
-        org.apache.commons.io.filefilter;
-        org.apache.commons.io.input;
-        org.apache.commons.io.output;
-        org.apache.commons.io.*;version=${project.version};-noimport:=true
+      <!-- Explicit list of packages from IO 1.4 -->
+      org.apache.commons.io;
+      org.apache.commons.io.comparator;
+      org.apache.commons.io.filefilter;
+      org.apache.commons.io.input;
+      org.apache.commons.io.output;version=1.4.9999;-noimport:=true,
+      <!-- Same list plus * for new packages -->
+      org.apache.commons.io;
+      org.apache.commons.io.comparator;
+      org.apache.commons.io.filefilter;
+      org.apache.commons.io.input;
+      org.apache.commons.io.output;
+      org.apache.commons.io.*;version=${project.version};-noimport:=true
     </commons.osgi.export>
 
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
@@ -316,7 +317,8 @@ file comparators, endian transformation classes, and much more.
           <argLine>-Xmx25M</argLine>
           <includes>
             <!-- Only include test classes, not test data -->
-            <include>**/*Test*.class</include>
+            <include>org.apache.commons.io.output.**</include>
+            <include>org.apache.commons.io.input.**</include>
           </includes>
           <excludes>
             <exclude>**/*AbstractTestCase*</exclude>
@@ -341,7 +343,7 @@ file comparators, endian transformation classes, and much more.
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${checkstyle.plugin.version}</version>
         <configuration>
-          <configLocation>${basedir}/checkstyle.xml</configLocation>
+          <configLocation>checkstyle.xml</configLocation>
           <enableRulesSummary>false</enableRulesSummary>
         </configuration>
       </plugin>
@@ -352,6 +354,26 @@ file comparators, endian transformation classes, and much more.
           <ignorePathsToDelete>
             <ignorePathToDelete>javadocs</ignorePathToDelete>
           </ignorePathsToDelete>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>${pitest.version}</version>
+        <executions>
+          <execution>
+            <id>pit-report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>mutationCoverage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <targetClasses>
+            <param>org.apache.commons.io.output*</param>
+            <param>org.apache.commons.io.input*</param>
+          </targetClasses>
         </configuration>
       </plugin>
       <!--
@@ -379,7 +401,7 @@ file comparators, endian transformation classes, and much more.
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${checkstyle.plugin.version}</version>
         <configuration>
-          <configLocation>${basedir}/checkstyle.xml</configLocation>
+          <configLocation>checkstyle.xml</configLocation>
           <enableRulesSummary>false</enableRulesSummary>
         </configuration>
       </plugin>
@@ -428,6 +450,7 @@ file comparators, endian transformation classes, and much more.
                       <dirset dir="${commons.scmPubCheckoutDirectory}" includes="*" />
                     </pathconvert>
                     <exec executable="svn">
+                      <!--suppress UnresolvedMavenProperty -->
                       <arg line="update --set-depth infinity ${dirs}" />
                     </exec>
                   </target>
